@@ -1,6 +1,9 @@
 import random
 from shared import *
 
+writeData = True
+# Toggle to False to run the code without changing local files.
+
 def allp(iterable, p):
     for i in iterable:
         if not p(i): return False
@@ -22,11 +25,12 @@ nTrain = 3*len(filtered_words)//4
 train_words = filtered_words[0:nTrain]
 test_words = filtered_words[nTrain:]
 
-with open("train_words.txt", 'w') as f:
-    f.writelines(train_words)
+if writeData:
+    with open("train_words.txt", 'w') as f:
+        f.writelines(train_words)
 
-with open("test_words.txt", 'w') as f:
-    f.writelines(test_words)
+    with open("test_words.txt", 'w') as f:
+        f.writelines(test_words)
 
 
 # Now generate gibberish
@@ -42,7 +46,6 @@ for i in range(MIN_WORD_LENGTH, MAX_WORD_LENGTH+1):
 def randChar():
     return chr(random.randrange(0, 26) + ord('a'))
 
-english_frequencies = [0.078, 0.02, 0.04, 0.038, 0.1137, 0.014, 0.03, 0.023, 0.086, 0.0025, 0.0097, 0.053, 0.027, 0.072, 0.061, 0.028, 0.0019, 0.073, 0.087, 0.067, 0.033, 0.01, 0.0091, 0.0027, 0.016, 0.0044]
 k = 0
 cumulative_english_frequencies = [ k := k + f for f in english_frequencies ]
 cumulative_english_frequencies[-1] = 1 # floating point errors makes this not quite 1. do this to prevent index error below.
@@ -69,8 +72,10 @@ for (length, count) in length_counts.items():
 
 train_unwords = unwords[0:nTrain]
 test_unwords = unwords[nTrain:]
-with open("train_unwords.txt", 'w') as f:
-    f.writelines(train_unwords)
 
-with open("test_unwords.txt", 'w') as f:
-    f.writelines(test_unwords)
+if writeData:
+    with open("train_unwords.txt", 'w') as f:
+        f.writelines(train_unwords)
+
+    with open("test_unwords.txt", 'w') as f:
+        f.writelines(test_unwords)

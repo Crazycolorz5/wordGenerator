@@ -46,12 +46,6 @@ class VAE(tf.keras.Model):
         self.classifier_optimizer = tf.keras.optimizers.Adam()
         self._batch_size = batch_size
         self.trainClassifier = False
-        self.letter_frequencies = tf.constant([
-            0.0817, 0.0149, 0.0278, 0.0425, 0.1270, 0.0223, 0.0202, 0.0609,
-            0.0697, 0.0015, 0.0077, 0.0403, 0.0241, 0.0675, 0.0751, 0.0193,
-            0.0010, 0.0599, 0.0633, 0.0906, 0.0276, 0.0098, 0.0236, 0.0015,
-            0.0197, 0.0007
-        ], dtype=tf.float32)
 
     def train_step(self, data):
         x = data[0] if isinstance(data, tuple) else data
@@ -107,7 +101,7 @@ class VAE(tf.keras.Model):
             mean_letter_probs = tf.reduce_sum(masked_reconstruction, axis=[0, 1]) / tf.reduce_sum(mask_expanded)
             
             frequency_penalty = tf.reduce_sum(
-                tf.maximum(0.0, mean_letter_probs - tf.pad(self.letter_frequencies, [[0, VOCAB_SIZE - 26]]))
+                tf.maximum(0.0, mean_letter_probs - tf.pad(english_frequencies, [[0, VOCAB_SIZE - 26]]))
             )
 
             total_loss = reconstruction_loss + 0.1 * kl_loss + 2 * classifier_loss + 0.2 * consecutive_similarity + 0.5 * frequency_penalty
