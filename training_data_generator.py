@@ -1,8 +1,6 @@
 import random
 from shared import *
 
-n = 6
-
 def allp(iterable, p):
     for i in iterable:
         if not p(i): return False
